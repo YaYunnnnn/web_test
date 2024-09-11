@@ -4,7 +4,7 @@ const path = require('path');
 const bodyParser = require('body-parser');  // 用來解析 POST 請求的數據
 
 const app = express();
-const port = 3000;
+const port = process.env.PORT || 3000;  // Vercel 中可能需要使用環境變數中的 PORT
 
 // 設置靜態文件夾
 app.use(express.static('public'));
@@ -15,8 +15,8 @@ app.use(bodyParser.urlencoded({ extended: true }));
 
 // 讀取 Excel 檔案並根據 ID 搜尋資料
 app.post('/search', (req, res) => {
-    // 使用絕對路徑指定 Excel 檔案的位置
-    const filePath = path.join('C:', 'Users', '123', 'Desktop', 'web test', 'web_test.xlsx');
+    // 使用相對路徑指定 Excel 檔案的位置（將 Excel 文件放在根目錄）
+    const filePath = path.join(__dirname, 'web_test.xlsx');
     
     // 讀取 Excel 檔案
     const workbook = xlsx.readFile(filePath);
