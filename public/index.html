@@ -13,30 +13,32 @@
 
     <script>
         function searchID() {
-            // 取得使用者輸入的 ID
             const id = document.getElementById('userID').value;
 
-            // 發送 POST 請求到伺服器
             fetch('/search', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json'
                 },
-                body: JSON.stringify({ id: id })  // 將輸入的 ID 包裝為 JSON
+                body: JSON.stringify({ id: id })
             })
-            .then(response => response.json())  // 解析伺服器返回的 JSON
+            .then(response => {
+                // 檢查伺服器是否返回狀態為成功
+                if (!response.ok) {
+                    throw new Error('伺服器錯誤，狀態碼: ' + response.status);
+                }
+                return response.json();  // 解析 JSON
+            })
             .then(data => {
-                // 如果成功，顯示找到的結果
                 if (data.success) {
                     document.getElementById('result').innerText = '找到資料: ' + data.data.join(', ');
                 } else {
-                    // 顯示錯誤信息
                     document.getElementById('result').innerText = data.message;
                 }
             })
             .catch(error => {
-                // 處理請求錯誤
-                document.getElementById('result').innerText = '發生錯誤: ' + error;
+                // 顯示詳細的錯誤信息
+                document.getElementById('result').innerText = '發生錯誤: ' + error.message;
             });
         }
     </script>
