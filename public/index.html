@@ -15,6 +15,7 @@
         function searchID() {
             const id = document.getElementById('userID').value;
 
+            // 使用相對路徑，在本地和雲端都能正常運行
             fetch('/search', {
                 method: 'POST',
                 headers: {
@@ -23,7 +24,6 @@
                 body: JSON.stringify({ id: id })
             })
             .then(response => {
-                // 檢查伺服器是否返回狀態為成功
                 if (!response.ok) {
                     throw new Error('伺服器錯誤，狀態碼: ' + response.status);
                 }
@@ -37,7 +37,6 @@
                 }
             })
             .catch(error => {
-                // 顯示詳細的錯誤信息
                 document.getElementById('result').innerText = '發生錯誤: ' + error.message;
             });
         }
